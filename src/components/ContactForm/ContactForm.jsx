@@ -1,57 +1,74 @@
-import { Form, Formik, Field, ErrorMessage } from 'formik';
-import { useDispatch } from 'react-redux';
-import { nanoid } from 'nanoid';
-import * as Yup from 'yup';
-import { addContact } from '/src/redux/contactsSlice.js';
-
-import css from './ContactForm.module.css';
-
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { FaUserLarge, FaPhone } from "react-icons/fa6";
+import * as Yup from "yup";
+import css from "./ContactForm.module.css";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsOps";
 const ContactForm = () => {
-  const initialContactValues = {
-    name: '',
-    number: '',
-  };
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    const newContact = { ...values, id: nanoid() };
-    dispatch(addContact(newContact));
-
+    dispatch(addContact(values));
     actions.resetForm();
   };
 
-  const FeedbackSchema = Yup.object().shape({
-    name: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required').trim(),
-    number: Yup.string()
-      .matches(/^\d{3}-\d{2}-\d{2}$/g, 'The number format must be 123-45-67')
-      .required('Required')
-      .trim(),
-  });
-
   return (
-    <div>
-      <Formik
-        initialValues={initialContactValues}
-        onSubmit={handleSubmit}
-        validationSchema={FeedbackSchema}
-      >
-        <Form className={css.name}>
-          <label className={css.label}>
-            <span>Name</span>
-            <Field type="text" name="name" placeholder="Name Surname"></Field>
-            <ErrorMessage name="name" component="span" />
-          </label>
-          <label className={css.label}>
-            <span>Number</span>
-            <Field type="tel" name="number" placeholder="xxx-xx-xx"></Field>
-            <ErrorMessage name="number" component="span" />
-          </label>
-          <button className={css.button} type="submit">
-            Add contact
-          </button>
-        </Form>
-      </Formik>
-    </div>
+    <Formik
+      initialValues={{ name: "", number: "" }}
+      validationSchema={Yup.object({
+        name: Yup.string()
+          .matches(/^[A-Za-z]+$/, "Name must contain only letters")
+          .min(3, "Must be at least 3 characters")
+          .max(50, "Must be 50 characters or less")
+          .required("Enter name"),
+        number: Yup.string()
+          .matches(
+            /^\d{3}-\d{2}-\d{2}$/,
+            "Number must be in the format 123-45-67"
+          )
+          .required("Enter number"),
+      })}
+      onSubmit={handleSubmit}
+    >
+      <Form className={css.form}>
+        <label className={css.title}>Name</label>
+        <div className={css.input}>
+          <Field
+            className={css.submit}
+            type="text"
+            name="name"
+            placeholder="Name"
+            id="name"
+          />
+          <FaUserLarge className={css.user} size="15" />
+        </div>
+        <ErrorMessage
+          className={css.error}
+          name="name"
+          component="div"
+        />
+
+        <label className={css.title}>Number</label>
+        <div className={css.input}>
+          <Field
+            className={css.submit}
+            type="text"
+            name="number"
+            placeholder="xxx-xx-xx"
+            id="number"
+          />
+          <FaPhone className={css.phone} size="15" />
+        </div>
+        <ErrorMessage
+          className={css.error}
+          name="number"
+          component="div"
+        />
+        <button className={css.button} type="submit">
+          Add contact
+        </button>
+      </Form>
+    </Formik>
   );
 };
 

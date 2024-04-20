@@ -1,25 +1,35 @@
-import { useSelector } from 'react-redux';
-import { selectContacts } from '/src/redux/contactsSlice.js';
-import { selectNameFilter } from '../../redux/filtersSlice';
+import css from "./ContactList.module.css";
+import Contact from "../Contact/Contact";
+import { useSelector } from "react-redux";
+import { selectNameFilter } from "../../redux/filtersSlice";
+import { selectContacts } from "../../redux/contactsSlice";
 
-import Contact from '../Contact/Contact';
-import css from './ContactList.module.css';
+const getVisibleContacts = (contacts, filter) => {
+  if (filter.length > 0) {
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(filter.trim().toLowerCase())
+    );
+  } else {
+    return contacts;
+  }
+};
 
 const ContactList = () => {
   const contacts = useSelector(selectContacts);
   const filter = useSelector(selectNameFilter);
-  const filteredContacs = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-
+  const filterContacts = getVisibleContacts(contacts, filter);
   return (
-    <ul className={css.list}>
-      {filteredContacs.map(contact => (
-        <li className={css.item} key={contact.id}>
-          <Contact name={contact.name} phone={contact.number} id={contact.id} />
-        </li>
-      ))}
-    </ul>
+    <div>
+      {filterContacts && filterContacts.length > 0 ? (
+        <ul className={css.list}>
+          {filterContacts.map((contact) => (
+            <Contact key={contact.id} contact={contact} />
+          ))}
+        </ul>
+      ) : (
+        <p className={css.text}>No contacts yet</p>
+      )}
+    </div>
   );
 };
 

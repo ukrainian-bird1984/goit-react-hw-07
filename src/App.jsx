@@ -1,13 +1,10 @@
-import css from './App.module.css';
-
-import Contact from './components/Contact/Contact';
-import ContactForm from './components/ContactForm/ContactForm';
-import SearchBox from './components/SearchBox/SearchBox';
-import ContactList from './components/ContactList/ContactList';
+import ContactForm from "./components/ContactForm/ContactForm";
+import SearchBox from "./components/SearchBox/SearchBox";
+import ContactList from "./components/ContactList/ContactList";
+import { FcContacts } from "react-icons/fc";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchContacts } from "./redux/contactsOps";
-import { FcContacts } from "react-icons/fc";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -19,7 +16,7 @@ const App = () => {
   return (
     <div className="container">
       <h1 className="title">
-        Phonebook <FcContacts className="icon" />
+        Phonebook <FcContacts className="phonebook" />
       </h1>
       <ContactForm />
       <SearchBox />
