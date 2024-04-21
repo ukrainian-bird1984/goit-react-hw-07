@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { serLarge, Phone } from "react-icons/fa6";
+import { FaUserLarge, FaPhone } from "react-icons/fa6";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
@@ -40,7 +40,7 @@ const ContactForm = () => {
             placeholder="Name"
             id="name"
           />
-          <UserLarge className={css.user} size="15" />
+          <FaUserLarge className={css.user} size="15" />
         </div>
         <ErrorMessage
           className={css.error}
@@ -57,7 +57,7 @@ const ContactForm = () => {
             placeholder="xxx-xx-xx"
             id="number"
           />
-          <Phone className={css.phone} size="15" />
+          <FaPhone className={css.phone} size="15" />
         </div>
         <ErrorMessage
           className={css.error}
